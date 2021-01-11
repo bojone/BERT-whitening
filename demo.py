@@ -1,4 +1,6 @@
 #! -*- coding: utf-8 -*-
+# 简单的线性变换（白化）操作，就可以达到BERT-flow的效果。
+# 测试任务：GLUE的STS-B。
 
 import numpy as np
 from bert4keras.backend import keras, K
