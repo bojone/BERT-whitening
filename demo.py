@@ -13,6 +13,7 @@ from keras.models import Model
 
 def load_train_data(filename):
     """加载训练数据（带标签）
+    单条格式：(文本1, 文本2, 标签)
     """
     D = []
     with open(filename, encoding='utf-8') as f:
@@ -25,6 +26,7 @@ def load_train_data(filename):
 
 def load_test_data(filename):
     """加载测试数据（带标签）
+    单条格式：(文本1, 文本2, 标签)
     """
     D = []
     with open(filename, encoding='utf-8') as f:
