@@ -1,7 +1,7 @@
 #! -*- coding: utf-8 -*-
 # 简单的线性变换（白化）操作，就可以达到BERT-flow的效果。
-# 测试任务：GLUE的STS-B。
 # 测试环境：tensorflow 1.14 + keras 2.3.1 + bert4keras 0.9.7
+# 测试任务：GLUE的STS-B。
 
 import numpy as np
 import scipy.stats
@@ -38,8 +38,10 @@ def load_test_data(filename):
 
 
 # 加载数据集
-train_data = load_train_data('/root/glue/STS-B/train.tsv')
-test_data = load_test_data('/root/glue/STS-B/sts-test.csv')
+datasets = {
+    'sts-b-train': load_train_data('/root/glue/STS-B/train.tsv'),
+    'sts-b-test': load_test_data('/root/glue/STS-B/sts-test.csv')
+}
 
 # bert配置
 config_path = '/root/kg/bert/uncased_L-12_H-768_A-12/bert_config.json'
@@ -116,7 +118,9 @@ def compute_kernel_bias(vecs):
     u, s, vh = np.linalg.svd(cov)
     W = np.dot(np.diag(s**0.5), vh)
     W = np.linalg.inv(W)
-    return W, -mu
+    return None, None
+    # return W, -mu
+    # return W[:, :256], -mu
 
 
 def transform_and_normalize(vecs, kernel=None, bias=None):
@@ -127,27 +131,37 @@ def transform_and_normalize(vecs, kernel=None, bias=None):
     return vecs / (vecs**2).sum(axis=1, keepdims=True)**0.5
 
 
-def corrcoef(x, y):
+def compute_corrcoef(x, y):
     """Spearman相关系数
     """
     return scipy.stats.spearmanr(x, y).correlation
 
 
-# 语料向量化，计算变换矩阵和偏置项
-a_train_vecs, b_train_vecs, train_labels = convert_to_vecs(train_data)
-a_test_vecs, b_test_vecs, test_labels = convert_to_vecs(test_data)
-kernel, bias = compute_kernel_bias([
-    a_train_vecs, b_train_vecs, a_test_vecs, b_test_vecs
+# 语料向量化
+all_names, all_weights, all_vecs, all_labels = [], [], [], []
+for name, data in datasets.items():
+    a_vecs, b_vecs, labels = convert_to_vecs(data)
+    all_names.append(name)
+    all_weights.append(len(data))
+    all_vecs.append((a_vecs, b_vecs))
+    all_labels.append(labels)
+
+# 计算变换矩阵和偏置项
+kernel, bias = compute_kernel_bias([v for vecs in all_vecs for v in vecs])
+
+# 变换，标准化，相似度，相关系数
+all_corrcoefs = []
+for (a_vecs, b_vecs), labels in zip(all_vecs, all_labels):
+    a_vecs = transform_and_normalize(a_vecs, kernel, bias)
+    b_vecs = transform_and_normalize(b_vecs, kernel, bias)
+    sims = (a_vecs * b_vecs).sum(axis=1)
+    corrcoef = compute_corrcoef(labels, sims)
+    all_corrcoefs.append(corrcoef)
+
+all_corrcoefs.extend([
+    np.average(all_corrcoefs),
+    np.average(all_corrcoefs, weights=all_weights)
 ])
+all_corrcoefs = dict(zip(all_names + ['avg', 'w-avg'], all_corrcoefs))
 
-# 变换，标准化，相似度
-a_train_vecs = transform_and_normalize(a_train_vecs, kernel, bias)
-b_train_vecs = transform_and_normalize(b_train_vecs, kernel, bias)
-train_sims = (a_train_vecs * b_train_vecs).sum(axis=1)
-print(u'训练集的相关系数：%s' % corrcoef(train_labels, train_sims))
-
-# 变换，标准化，相似度
-a_test_vecs = transform_and_normalize(a_test_vecs, kernel, bias)
-b_test_vecs = transform_and_normalize(b_test_vecs, kernel, bias)
-test_sims = (a_test_vecs * b_test_vecs).sum(axis=1)
-print(u'测试集的相关系数：%s' % corrcoef(test_labels, test_sims))
+print(all_corrcoefs)
