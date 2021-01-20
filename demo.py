@@ -113,8 +113,8 @@ def compute_kernel_bias(vecs):
     mu = vecs.mean(axis=0, keepdims=True)
     cov = np.cov(vecs.T)
     u, s, vh = np.linalg.svd(cov)
-    W = np.dot(u, np.diag(s**0.5))
-    W = np.linalg.inv(W.T)
+    W = np.dot(np.diag(s**0.5), vh)
+    W = np.linalg.inv(W)
     return W, -mu
 
 
