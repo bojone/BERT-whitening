@@ -4,6 +4,7 @@
 # 测试环境：tensorflow 1.14 + keras 2.3.1 + bert4keras 0.9.7
 
 import numpy as np
+import scipy.stats
 from bert4keras.backend import keras, K
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.models import build_transformer_model
@@ -126,6 +127,12 @@ def transform_and_normalize(vecs, kernel=None, bias=None):
     return vecs / (vecs**2).sum(axis=1, keepdims=True)**0.5
 
 
+def corrcoef(x, y):
+    """Spearman相关系数
+    """
+    return scipy.stats.spearmanr(x, y).correlation
+
+
 # 语料向量化，计算变换矩阵和偏置项
 a_train_vecs, b_train_vecs, train_labels = convert_to_vecs(train_data)
 a_test_vecs, b_test_vecs, test_labels = convert_to_vecs(test_data)
@@ -137,10 +144,10 @@ kernel, bias = compute_kernel_bias([
 a_train_vecs = transform_and_normalize(a_train_vecs, kernel, bias)
 b_train_vecs = transform_and_normalize(b_train_vecs, kernel, bias)
 train_sims = (a_train_vecs * b_train_vecs).sum(axis=1)
-print(u'训练集的相关系数：%s' % np.corrcoef(train_labels, train_sims)[0, 1])
+print(u'训练集的相关系数：%s' % corrcoef(train_labels, train_sims))
 
 # 变换，标准化，相似度
 a_test_vecs = transform_and_normalize(a_test_vecs, kernel, bias)
 b_test_vecs = transform_and_normalize(b_test_vecs, kernel, bias)
 test_sims = (a_test_vecs * b_test_vecs).sum(axis=1)
-print(u'测试集的相关系数：%s' % np.corrcoef(test_labels, test_sims)[0, 1])
+print(u'测试集的相关系数：%s' % corrcoef(test_labels, test_sims))
