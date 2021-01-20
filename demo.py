@@ -118,9 +118,7 @@ def compute_kernel_bias(vecs):
     u, s, vh = np.linalg.svd(cov)
     W = np.dot(np.diag(s**0.5), vh)
     W = np.linalg.inv(W)
-    return None, None
-    # return W, -mu
-    # return W[:, :256], -mu
+    return W, -mu
 
 
 def transform_and_normalize(vecs, kernel=None, bias=None):
