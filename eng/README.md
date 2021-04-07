@@ -10,7 +10,7 @@ BERT-whitening在常见英文数据集上的测试，基本上已经对齐了BER
 - nli_train.py  用NLI数据微调模型（即Sentence-BERT的Keras版）
 ```
 
-## 使用
+## 评测
 
 命令格式：
 ```
@@ -31,3 +31,17 @@ python eval.py base STS-B -1 target
 ```
 
 ## 微调
+
+使用Sentence-BERT的方式用NLI数据微调：
+```
+python nli_train.py base
+python nli_train.py large
+```
+
+## 下载
+
+Google官方的两个BERT模型：
+- [uncased_L-12_H-768_A-12.zip](https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip)
+- [uncased_L-24_H-1024_A-16.zip](https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-24_H-1024_A-16.zip)
+
+关于语义相似度数据集，可以参考[BERT-flow](https://github.com/bohanli/BERT-flow)的下载方式，也可以从作者提供的百度云链接下载。
