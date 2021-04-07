@@ -5,6 +5,13 @@
 - 博客：https://kexue.fm/archives/8069
 - 论文：[《Whitening Sentence Representations for Better Semantics and Faster Retrieval》](https://arxiv.org/abs/2103.15316)
 
+## 使用
+
+- [eng](https://github.com/bojone/BERT-whitening/tree/main/eng): BERT-whitening在常见英文数据集上的测试；
+- [zhn](https://github.com/bojone/BERT-whitening/tree/main/zhn): BERT-whitening在常见中文数据集上的测试。
+
+测试环境：tensorflow 1.14 + keras 2.3.1 + bert4keras 0.10.5，如果在其他环境组合下报错，请根据错误信息自行调整代码。
+
 ## 引用
 ```
 @article{su2021whitening,
