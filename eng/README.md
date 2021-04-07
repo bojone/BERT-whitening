@@ -11,3 +11,23 @@ BERT-whitening在常见英文数据集上的测试，基本上已经对齐了BER
 ```
 
 ## 使用
+
+命令格式：
+```
+python eval.py [model_type] [task_name] [n_components] [normalized_by]
+```
+
+使用例子：
+```
+python eval.py base STS-B -1 target
+```
+
+其中四个参数必须传入，含义分别如下：
+```
+- model_type: 模型大小，必须是['base', 'large', 'base-nli', 'large-nli']之一；
+- task_name: 评测数据集，必须是['STS-B', 'STS-12', 'STS-13', 'STS-14', 'STS-15', 'STS-16', 'SICK-R']之一；
+- n_components: 保留的维度，如果是0，则不进行whitening，如果是负数，则保留全部维度，如果是其他正数，则按照所给的维度保留；
+- normalized_by: 白化所用的数据集，必须是['target', 'nli']之一。
+```
+
+## 微调
