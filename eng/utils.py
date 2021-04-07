@@ -151,12 +151,12 @@ def get_encoder(config_path, checkpoint_path, pooling='first-last-avg'):
 
     if pooling == 'first-last-avg':
         outputs = [
-            GlobalAveragePooling1D()(outputs[0]),
-            GlobalAveragePooling1D()(outputs[-1])
+            keras.layers.GlobalAveragePooling1D()(outputs[0]),
+            keras.layers.GlobalAveragePooling1D()(outputs[-1])
         ]
         output = keras.layers.Average()(outputs)
     elif pooling == 'last-avg':
-        output = GlobalAveragePooling1D()(outputs[-1])
+        output = keras.layers.GlobalAveragePooling1D()(outputs[-1])
 
     # 最后的编码器
     encoder = Model(bert.inputs, output)
