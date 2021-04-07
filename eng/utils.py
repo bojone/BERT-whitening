@@ -10,6 +10,7 @@ from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import open
 from bert4keras.snippets import sequence_padding
+from keras.layers import GlobalAveragePooling1D
 from keras.models import Model
 
 if not os.path.exists('weights'):
@@ -128,17 +129,6 @@ def get_tokenizer(dict_path):
     """建立分词器
     """
     return Tokenizer(dict_path, do_lower_case=True)
-
-
-class GlobalAveragePooling1D(keras.layers.GlobalAveragePooling1D):
-    """自定义全局池化
-    """
-    def call(self, inputs, mask=None):
-        if mask is not None:
-            mask = K.cast(mask, K.floatx())[:, :, None]
-            return K.sum(inputs * mask, axis=1) / K.sum(mask, axis=1)
-        else:
-            return K.mean(inputs, axis=1)
 
 
 def get_encoder(config_path, checkpoint_path, pooling='first-last-avg'):
