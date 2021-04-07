@@ -46,4 +46,5 @@ Google官方的两个BERT模型：
 
 关于语义相似度数据集，可以参考[BERT-flow](https://github.com/bohanli/BERT-flow)的下载方式，也可以从作者提供的百度云链接下载。
 - 链接: https://pan.baidu.com/s/1UfPZc7n1cPZlakiIQF8eBQ 提取码: q2tc
+
 其中senteval目录是评测数据集汇总，senteval.zip是senteval目录的打包，两者下其一就好，weights目录包含作者事先微调好的SBERT模型和计算好的均值方差，可以复现论文中的结果，读者也可以不下载weights，评测脚本会自动生成均值方差，`nli_train.py`则可以自己训练SBERT
