@@ -13,6 +13,10 @@
 
 测试环境：tensorflow 1.14 + keras 2.3.1 + bert4keras 0.10.5，如果在其他环境组合下报错，请根据错误信息自行调整代码。
 
+## 下载
+
+文件合集：链接: https://pan.baidu.com/s/10EuOgtI_o7EvJ7Fow-fzRg 提取码: v1b4
+
 ## 引用
 ```
 @article{su2021whitening,
