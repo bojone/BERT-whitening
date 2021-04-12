@@ -10,8 +10,8 @@ jieba.initialize()
 # 基本参数
 model_type, pooling, task_name, n_components = sys.argv[1:]
 assert model_type in [
-    'BERT', 'RoBERTa', 'WoBERT', 'RoFormer', 'BERT-large', 'RoBERTa-large',
-    'SimBERT', 'SimBERT-tiny', 'SimBERT-small'
+    'BERT', 'RoBERTa', 'NEZHA', 'WoBERT', 'RoFormer', 'BERT-large',
+    'RoBERTa-large', 'NEZHA-large', 'SimBERT', 'SimBERT-tiny', 'SimBERT-small'
 ]
 assert pooling in ['first-last-avg', 'last-avg', 'cls', 'pooler']
 assert task_name in ['ATEC', 'BQ', 'LCQMC', 'PAWSX', 'STS-B']
@@ -46,16 +46,23 @@ model_name = {
     'BERT': 'chinese_L-12_H-768_A-12',
     'RoBERTa': 'chinese_roberta_wwm_ext_L-12_H-768_A-12',
     'WoBERT': 'chinese_wobert_plus_L-12_H-768_A-12',
+    'NEZHA': 'nezha_base_wwm',
     'RoFormer': 'chinese_roformer_L-12_H-768_A-12',
     'BERT-large': 'uer/mixed_corpus_bert_large_model',
     'RoBERTa-large': 'chinese_roberta_wwm_large_ext_L-24_H-1024_A-16',
+    'NEZHA-large': 'nezha_large_wwm',
     'SimBERT': 'chinese_simbert_L-12_H-768_A-12',
     'SimBERT-tiny': 'chinese_simbert_L-4_H-312_A-12',
     'SimBERT-small': 'chinese_simbert_L-6_H-384_A-12'
 }[model_type]
 
 config_path = '/root/kg/bert/%s/bert_config.json' % model_name
-checkpoint_path = '/root/kg/bert/%s/bert_model.ckpt' % model_name
+if model_type == 'NEZHA':
+    checkpoint_path = '/root/kg/bert/%s/model.ckpt-691689' % model_name
+elif model_type == 'NEZHA-large':
+    checkpoint_path = '/root/kg/bert/%s/model.ckpt-346400' % model_name
+else:
+    checkpoint_path = '/root/kg/bert/%s/bert_model.ckpt' % model_name
 dict_path = '/root/kg/bert/%s/vocab.txt' % model_name
 
 # 建立分词器
@@ -70,6 +77,10 @@ else:
 if model_type == 'RoFormer':
     encoder = get_encoder(
         config_path, checkpoint_path, model='roformer', pooling=pooling
+    )
+elif 'NEZHA' in model_type:
+    encoder = get_encoder(
+        config_path, checkpoint_path, model='nezha', pooling=pooling
     )
 else:
     encoder = get_encoder(config_path, checkpoint_path, pooling=pooling)
