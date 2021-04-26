@@ -34,10 +34,12 @@ python eval.py BERT cls ATEC 256
 Google官方的两个BERT模型：
 - BERT：[chinese_L-12_H-768_A-12.zip](https://storage.googleapis.com/bert_models/2018_11_03/chinese_L-12_H-768_A-12.zip)
 - RoBERTa：[chinese_roberta_wwm_ext_L-12_H-768_A-12.zip](https://github.com/ymcui/Chinese-BERT-wwm)
+- NEZHA：[NEZHA-base-WWM](https://github.com/huawei-noah/Pretrained-Language-Model/tree/master/NEZHA-TensorFlow)
 - WoBERT：[chinese_wobert_plus_L-12_H-768_A-12.zip](https://github.com/ZhuiyiTechnology/WoBERT)
 - RoFormer：[chinese_roformer_L-12_H-768_A-12.zip](https://github.com/ZhuiyiTechnology/roformer)
 - BERT-large：[uer/mixed_corpus_bert_large_model.zip](https://github.com/dbiir/UER-py)
 - RoBERTa-large：[chinese_roberta_wwm_ext_L-12_H-768_A-12.zip](https://github.com/ymcui/Chinese-BERT-wwm)
+- NEZHA-large：[NEZHA-large-WWM](https://github.com/huawei-noah/Pretrained-Language-Model/tree/master/NEZHA-TensorFlow)
 - SimBERT: [chinese_simbert_L-12_H-768_A-12.zip](https://github.com/ZhuiyiTechnology/simbert)
 - SimBERT: [chinese_simbert_L-4_H-312_A-12.zip](https://github.com/ZhuiyiTechnology/simbert)
 - SimBERT: [chinese_simbert_L-6_H-384_A-12.zip](https://github.com/ZhuiyiTechnology/simbert)
